@@ -1,11 +1,18 @@
 library(dplyr)
 run_analysis <- function(){
-  
+  mergedset <<- getmergeddata()
+}
+
+
+getmergeddata <- function(){
   ## Load the data files
   features <- readLines("data/features.txt")
-  trainingset <- read.csv("data/train/X_train.txt", sep="", header = FALSE)
-  testset <- read.csv("data/test/X_test.txt", sep="", header = FALSE)
-  
+  trainingset <- read.table("data/train/X_train.txt")
+  testset <- read.table("data/test/X_test.txt")
+  trainingsetactivitytype <- read.table("data/train/y_train.txt")
+  testsetactivitytype <- read.table("data/test/y_test.txt")
+  trainingsetsubjects <- read.table("data/train/subject_train.txt")
+  testsetsubjects <- read.table("data/test/subject_test.txt")
   
   ## Set column names according to the features txt file
   names(trainingset) <- features
@@ -21,13 +28,19 @@ run_analysis <- function(){
   trainingset <- mutate(trainingset, set = "training")
   testset <- mutate(testset, set = "test")
   
+  ## Add column to describing the activity type
+  trainingset <- mutate(trainingset, activitytype = trainingsetactivitytype[,1])
+  testset <- mutate(testset, activitytype = testsetactivitytype[,1])
+  
+  ## Add column to describing the subject
+  trainingset <- mutate(trainingset, subject = trainingsetsubjects[,1])
+  testset <- mutate(testset, subject = testsetsubjects[,1])
   
   ## Merge the two tbl
   mergedset <- bind_rows(trainingset, testset) 
   
   
   ### Set global variables for testing purposes
-
-  mergedset <<- mergedset
-  
+  mergedset$subject <- as.factor(mergedset$subject)
+  mergedset
 }
