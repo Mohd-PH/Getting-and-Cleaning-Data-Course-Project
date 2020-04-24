@@ -40,7 +40,9 @@ getmergeddata <- function(){
   mergedset <- bind_rows(trainingset, testset) 
   
   
-  ### Set global variables for testing purposes
+  ## Set the subject as a factor
   mergedset$subject <- as.factor(mergedset$subject)
+  
+  ## return the merged data
   mergedset
 }
