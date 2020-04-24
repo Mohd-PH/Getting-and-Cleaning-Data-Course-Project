@@ -8,6 +8,7 @@ getmergeddata <- function(){
   ## Load the data files
   features <- readLines("data/features.txt")
   meanstdfeatures <- features[grep("(mean|std)\\(", features)]
+  activitylabels <- read.table("data/activity_labels.txt")[,2]
   trainingset <- read.table("data/train/X_train.txt")
   testset <- read.table("data/test/X_test.txt")
   trainingsetactivitytype <- read.table("data/train/y_train.txt")
@@ -45,6 +46,9 @@ getmergeddata <- function(){
   
   ## Set the subject as a factor
   mergedset$subject <- as.factor(mergedset$subject)
+  
+  ## Set a descriptive activity names to the activitytype column
+  mergedset <- mutate(mergedset, activitytype = activitylables[activitytype])
   
   ## return the merged data
   mergedset
