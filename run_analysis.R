@@ -3,7 +3,7 @@ run_analysis <- function(){
   mergedset <<- getmergeddata()
   
   
-  ## Group the merges set by activity type and subject to calculate the average
+  ## Group the merged set by activity type and subject to calculate the average
   groupedset <- group_by(mergedset, activitytype, subject)
   
   ## calculate the average of the grouped set and set it to the global enviroment
