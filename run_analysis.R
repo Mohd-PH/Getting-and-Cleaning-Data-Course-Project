@@ -7,6 +7,7 @@ run_analysis <- function(){
 getmergeddata <- function(){
   ## Load the data files
   features <- readLines("data/features.txt")
+  meanstdfeatures <- features[grep("(mean|std)\\(", features)]
   trainingset <- read.table("data/train/X_train.txt")
   testset <- read.table("data/test/X_test.txt")
   trainingsetactivitytype <- read.table("data/train/y_train.txt")
@@ -37,8 +38,10 @@ getmergeddata <- function(){
   testset <- mutate(testset, subject = testsetsubjects[,1])
   
   ## Merge the two tbl
-  mergedset <- bind_rows(trainingset, testset) 
+  mergedset <- bind_rows(trainingset, testset)
   
+  ## Only select mean std activitytype and subject columns
+  mergedset <- select(mergedset, all_of(meanstdfeatures), activitytype, subject)
   
   ## Set the subject as a factor
   mergedset$subject <- as.factor(mergedset$subject)
